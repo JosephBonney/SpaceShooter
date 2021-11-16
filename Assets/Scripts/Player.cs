@@ -11,6 +11,13 @@ namespace SpaceShooter.Player
 
         public float horizontalInput;
         public float verticalInput;
+
+        [SerializeField]
+        private GameObject _laserPrefab;
+        [SerializeField]
+        private float _fireRate = 0.5f;
+        [SerializeField]
+        private float _canFire = -1;
         #endregion
 
         #region BuiltIn Methods
@@ -20,12 +27,30 @@ namespace SpaceShooter.Player
         }
         void Update()
         {
+            FireLaser();
             CalculateMovement();
         }
         #endregion
 
         #region Custom Methods
 
+        #region Fire Laser
+        void FireLaser()
+        {
+            Vector3 offset = new Vector3(0f, .8f, 0f);
+
+            if (Input.GetButtonDown("Fire1") && Time.time > _canFire)
+            {
+                _canFire = Time.time + _fireRate;
+                Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
+            }
+            if (Input.GetButtonDown("Jump") && Time.time > _canFire)
+            {
+                _canFire = Time.time + _fireRate;
+                Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
+            }
+        }
+        #endregion
         #region Movement
         void CalculateMovement()
         {
