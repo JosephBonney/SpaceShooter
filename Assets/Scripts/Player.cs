@@ -7,6 +7,7 @@ namespace SpaceShooter.Player
     public class Player : MonoBehaviour
     {
         #region Variables
+
         public float speed = 3.5f;
 
         public float horizontalInput;
@@ -18,12 +19,26 @@ namespace SpaceShooter.Player
         private float _fireRate = 0.5f;
         [SerializeField]
         private float _canFire = -1;
+
+        [SerializeField]
+        private int _lives = 3;
+
+        private SpawnManager spawner;
+
         #endregion
 
         #region BuiltIn Methods
         void Start()
         {
             transform.position = new Vector3 (0, 0, 0);
+
+            spawner = GameObject.Find("SpawnManager"). GetComponent<SpawnManager>();
+
+            if(spawner == null)
+            {
+                Debug.LogError("The Spawn Manager Is NULL");
+            }
+
         }
         void Update()
         {
@@ -39,7 +54,7 @@ namespace SpaceShooter.Player
         {
             Vector3 offset = new Vector3(0f, .8f, 0f);
 
-            if (Input.GetButtonDown("Fire1") && Time.time > _canFire)
+            if (Input.GetButtonDown("Fire1") && Time.time > _canFire) 
             {
                 _canFire = Time.time + _fireRate;
                 Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
@@ -51,6 +66,7 @@ namespace SpaceShooter.Player
             }
         }
         #endregion
+
         #region Movement
         void CalculateMovement()
         {
@@ -60,7 +76,6 @@ namespace SpaceShooter.Player
 
             transform.Translate(Vector3.right * horizontalInput * speed * Time.deltaTime);
             transform.Translate(Vector3.up * verticalInput * speed * Time.deltaTime);
-
             // Optimize
             // Create a new Vector3 variable and set it to the proper inputs
             // Vector3 direction = new Vector3 (horizontalInput, verticalInput, 0)
@@ -113,6 +128,22 @@ namespace SpaceShooter.Player
             #endregion
         }
         #endregion
+
+        #region Damage
+
+        public void Damage()
+        {
+            _lives -= 1;
+
+            if(_lives <= 0)
+            {
+                spawner.OnPlayerDeath();
+                Destroy(this.gameObject);
+            }
+        }
+
+        #endregion
+
         #endregion
     }
 }
