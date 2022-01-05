@@ -16,14 +16,20 @@ namespace SpaceShooter.Player
         [SerializeField]
         private GameObject _laserPrefab;
         [SerializeField]
+        private GameObject _tripleShot;
+        [SerializeField]
         private float _fireRate = 0.5f;
         [SerializeField]
         private float _canFire = -1;
+        [SerializeField]
+        private float TripleShotCoolDownRate = 5.0f;
 
         [SerializeField]
         private int _lives = 3;
 
         private SpawnManager spawner;
+
+        private bool isTripleShotActive = false;
 
         #endregion
 
@@ -52,19 +58,56 @@ namespace SpaceShooter.Player
         #region Fire Laser
         void FireLaser()
         {
-            Vector3 offset = new Vector3(0f, .8f, 0f);
+            Vector3 offset = new Vector3(0f, 1.0f, 0f);
 
-            if (Input.GetButtonDown("Fire1") && Time.time > _canFire) 
+            if(isTripleShotActive == true)
             {
-                _canFire = Time.time + _fireRate;
-                Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
+                if (Input.GetButtonDown("Fire1") && Time.time > _canFire)
+                {
+                    _canFire = Time.time + _fireRate;
+                    Instantiate(_tripleShot, transform.position, Quaternion.identity);
+                }
+                if (Input.GetButtonDown("Jump") && Time.time > _canFire)
+                {
+                    _canFire = Time.time + _fireRate;
+                    Instantiate(_tripleShot, transform.position, Quaternion.identity);
+                }
             }
-            if (Input.GetButtonDown("Jump") && Time.time > _canFire)
+            else
             {
-                _canFire = Time.time + _fireRate;
-                Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
+                if (Input.GetButtonDown("Fire1") && Time.time > _canFire)
+                {
+                    _canFire = Time.time + _fireRate;
+                    Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
+                }
+                if (Input.GetButtonDown("Jump") && Time.time > _canFire)
+                {
+                    _canFire = Time.time + _fireRate;
+                    Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
+                }
             }
+            
         }
+
+        #region TripleShot
+
+        public void TripleShotActive()
+        {
+            isTripleShotActive = true;
+            StartCoroutine(TripleShotPowerDownRoutine());
+        }
+        #endregion
+
+        #region IEnum
+
+        IEnumerator TripleShotPowerDownRoutine()
+        {
+            yield return new WaitForSeconds(TripleShotCoolDownRate);
+            isTripleShotActive = false;
+        }
+
+        #endregion
+
         #endregion
 
         #region Movement

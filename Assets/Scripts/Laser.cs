@@ -11,11 +11,6 @@ public class Laser : MonoBehaviour
     private float speed = 8;
 
     #endregion
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
 
     // Update is called once per frame
     void Update()
@@ -27,8 +22,15 @@ public class Laser : MonoBehaviour
     void DestroyLaser()
     {
         float posY = transform.position.y;
+
         if(posY >= 8f)
         {
+            
+            if(transform.parent != null)
+            {
+                Destroy(transform.parent.gameObject);
+            }
+
             Destroy(this.gameObject);
         }
     }

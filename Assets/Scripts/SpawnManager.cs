@@ -11,6 +11,9 @@ public class SpawnManager : MonoBehaviour
     public float waitTime = 5.0f;
 
     [SerializeField]
+    private GameObject TripleShotPowerupPrefab;
+
+    [SerializeField]
     private GameObject EnemyContainer;
 
     private bool stopSpawing = false;
@@ -18,16 +21,11 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SpawnRoutine());
+        StartCoroutine(SpawnEnemyRoutine());
+        StartCoroutine(SpawnPowerupRoutine());
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    IEnumerator SpawnRoutine()
+    IEnumerator SpawnEnemyRoutine()
     {
         float posY = transform.position.y;
         posY = 7.5f;
@@ -40,7 +38,19 @@ public class SpawnManager : MonoBehaviour
             newEnemy.transform.parent = EnemyContainer.transform;
             yield return new WaitForSeconds(waitTime);
         }
+    }
 
+    IEnumerator SpawnPowerupRoutine()
+    {
+        float powerupPosY = transform.position.y;
+        powerupPosY = 7.5f;
+
+        while(stopSpawing == false)
+        {
+            Vector3 powerupSpawnPos = new Vector3(Random.Range(-8f, 8f), powerupPosY, 0);
+            GameObject newPowerup = Instantiate(TripleShotPowerupPrefab, powerupSpawnPos, Quaternion.identity);
+            yield return new WaitForSeconds(Random.Range(3, 8));
+        }
     }
 
     public void OnPlayerDeath()
