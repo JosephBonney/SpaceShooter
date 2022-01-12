@@ -9,6 +9,12 @@ namespace SpaceShooter.Enemy
     {
         public float speed = -4f;
 
+        Player.Player player;
+
+        void Start()
+        {
+            player = GameObject.Find("Player").GetComponent<Player.Player>();
+        }
 
         // Update is called once per frame
         void Update()
@@ -38,8 +44,6 @@ namespace SpaceShooter.Enemy
 
             if(other.tag == "Player")
             {
-                Player.Player player = other.transform.GetComponent<Player.Player>();
-
                 if(player != null)
                 {
                     player.Damage();
@@ -51,6 +55,10 @@ namespace SpaceShooter.Enemy
             if (other.tag == "Laser")
             {
                 Destroy(other.gameObject);
+                if(player != null)
+                {
+                    player.AddScore(10);
+                }
                 Destroy(this.gameObject);
             }
         }

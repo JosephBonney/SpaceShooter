@@ -11,6 +11,10 @@ public class Powerup : MonoBehaviour
     [SerializeField] // 0 = Triple Shot, 1 = Speed Boost, 2 = Shields
     private int powerupID;
 
+    void Start()
+    {
+    }
+
     void Update()
     {
         PowerupBehavior();
@@ -31,12 +35,14 @@ public class Powerup : MonoBehaviour
     {
         Debug.Log("Hit: " + other.transform.name);
 
+        Player player = other.transform.GetComponent<Player>();
+
         if (other.tag == "Player")
         {
-            Player player = other.transform.GetComponent<Player>();
-
             if (player != null)
             {
+                player.AddScore(15);
+
                 switch(powerupID)
                 {
                     case 0:

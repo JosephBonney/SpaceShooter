@@ -35,11 +35,14 @@ namespace SpaceShooter.Player
         private int _lives = 3;
 
         private SpawnManager spawner;
+        private UIManager uiManager;
 
         private bool isTripleShotActive = false;
         private bool isSpeedBoostActive = false;
         private bool isShieldActive = false;
         private GameObject newShield;
+
+        public int score = 0;
 
         #endregion
 
@@ -51,6 +54,12 @@ namespace SpaceShooter.Player
             transform.position = new Vector3 (0, 0, 0);
 
             spawner = GameObject.Find("SpawnManager"). GetComponent<SpawnManager>();
+            uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+
+            if(uiManager == null)
+            {
+                Debug.Log("The UI Manager Is NULL");
+            }
 
             if(spawner == null)
             {
@@ -228,14 +237,27 @@ namespace SpaceShooter.Player
                 Destroy(newShield);
                 return;
             }
-            else
-                _lives -= 1;
+
+            _lives -= 1;
+
+            uiManager.UpdateLives(_lives);
+                
 
             if(_lives <= 0)
             {
                 spawner.OnPlayerDeath();
                 Destroy(this.gameObject);
             }
+        }
+
+        #endregion
+
+        #region Score
+
+        public void AddScore(int points)
+        {
+            score += points;
+            uiManager.UpdateScore(score);
         }
 
         #endregion
