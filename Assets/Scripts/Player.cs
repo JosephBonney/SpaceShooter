@@ -9,6 +9,8 @@ namespace SpaceShooter.Player
         #region Variables
 
         public float speed = 3.5f;
+        private float originalSpeed;
+        public float newspeed = 8.5f;
 
         public float horizontalInput;
         public float verticalInput;
@@ -18,11 +20,16 @@ namespace SpaceShooter.Player
         [SerializeField]
         private GameObject _tripleShot;
         [SerializeField]
+        private GameObject ShieldsPrefab;
+        [SerializeField]
         private float _fireRate = 0.5f;
         [SerializeField]
         private float _canFire = -1;
         [SerializeField]
         private float TripleShotCoolDownRate = 5.0f;
+        [SerializeField]
+        private float SpeedBoostCoolDownRate = 5.0f;
+
 
         [SerializeField]
         private int _lives = 3;
@@ -30,12 +37,17 @@ namespace SpaceShooter.Player
         private SpawnManager spawner;
 
         private bool isTripleShotActive = false;
+        private bool isSpeedBoostActive = false;
+        private bool isShieldActive = false;
+        private GameObject newShield;
 
         #endregion
 
         #region BuiltIn Methods
         void Start()
         {
+            originalSpeed = speed;
+
             transform.position = new Vector3 (0, 0, 0);
 
             spawner = GameObject.Find("SpawnManager"). GetComponent<SpawnManager>();
@@ -96,6 +108,33 @@ namespace SpaceShooter.Player
             isTripleShotActive = true;
             StartCoroutine(TripleShotPowerDownRoutine());
         }
+
+        public void SpeedBoostActive()
+        {
+            isSpeedBoostActive = true;
+            StartCoroutine(SpeedBoostPowerDownRoutine());
+            if (isSpeedBoostActive == true)
+            {
+                speed = newspeed;
+            }
+            else
+                speed = originalSpeed;
+        }
+
+        public void ShieldsActive()
+        {
+            isShieldActive = true;
+
+            if (isShieldActive == true)
+            {
+                newShield = Instantiate(ShieldsPrefab, transform.position, Quaternion.identity);
+                newShield.transform.parent = this.transform;
+            }
+            else
+                Debug.Log("No Shields");
+        }
+
+
         #endregion
 
         #region IEnum
@@ -104,6 +143,13 @@ namespace SpaceShooter.Player
         {
             yield return new WaitForSeconds(TripleShotCoolDownRate);
             isTripleShotActive = false;
+        }
+
+        IEnumerator SpeedBoostPowerDownRoutine()
+        {
+            yield return new WaitForSeconds(SpeedBoostCoolDownRate);
+            speed = originalSpeed;
+            isSpeedBoostActive = false;
         }
 
         #endregion
@@ -176,7 +222,14 @@ namespace SpaceShooter.Player
 
         public void Damage()
         {
-            _lives -= 1;
+            if(isShieldActive == true)
+            {
+                isShieldActive = false;
+                Destroy(newShield);
+                return;
+            }
+            else
+                _lives -= 1;
 
             if(_lives <= 0)
             {
