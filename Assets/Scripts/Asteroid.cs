@@ -15,15 +15,22 @@ public class Asteroid : MonoBehaviour
 
     private SpawnManager spawnTrigger;
 
+    private AudioClips AC;
+
     #endregion
     // Start is called before the first frame update
     void Start()
     {
         spawnTrigger = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
+        AC = GameObject.Find("AudioManager").GetComponent<AudioClips>();
 
         if(spawnTrigger == null)
         {
             Debug.LogError("spawn Manager is NULL");
+        }
+        if(AC == null)
+        {
+            Debug.LogError("No audio source or clip");
         }
     }
 
@@ -45,6 +52,7 @@ public class Asteroid : MonoBehaviour
     void Explode()
     {
         Instantiate(explosion, transform.position, Quaternion.identity);
+        AC.GetExplosionAudio();
         spawnTrigger.StartSpawning();
         Destroy(this.gameObject, 0.25f);
     }

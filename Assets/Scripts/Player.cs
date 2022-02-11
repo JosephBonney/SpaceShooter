@@ -50,6 +50,8 @@ namespace SpaceShooter.Player
 
         public int score = 0;
 
+        private AudioClips AC;
+
         #endregion
 
         #region BuiltIn Methods
@@ -61,6 +63,7 @@ namespace SpaceShooter.Player
 
             spawner = GameObject.Find("SpawnManager"). GetComponent<SpawnManager>();
             uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+            AC = GameObject.Find("AudioManager").GetComponent<AudioClips>();
 
             if(uiManager == null)
             {
@@ -70,6 +73,11 @@ namespace SpaceShooter.Player
             if(spawner == null)
             {
                 Debug.LogError("The Spawn Manager Is NULL");
+            }
+
+            if(AC == null)
+            {
+                Debug.LogError("No Audio source or clip");
             }
 
         }
@@ -93,11 +101,13 @@ namespace SpaceShooter.Player
                 {
                     _canFire = Time.time + _fireRate;
                     Instantiate(_tripleShot, transform.position, Quaternion.identity);
+                    AC.GetLaserAudioClip();
                 }
                 if (Input.GetButtonDown("Jump") && Time.time > _canFire)
                 {
                     _canFire = Time.time + _fireRate;
                     Instantiate(_tripleShot, transform.position, Quaternion.identity);
+                    AC.GetLaserAudioClip();
                 }
             }
             else
@@ -106,11 +116,14 @@ namespace SpaceShooter.Player
                 {
                     _canFire = Time.time + _fireRate;
                     Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
+                    AC.GetLaserAudioClip();
                 }
+                
                 if (Input.GetButtonDown("Jump") && Time.time > _canFire)
                 {
                     _canFire = Time.time + _fireRate;
                     Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
+                    AC.GetLaserAudioClip();
                 }
             }
             
@@ -297,6 +310,7 @@ namespace SpaceShooter.Player
             {
                 spawner.OnPlayerDeath();
                 Destroy(this.gameObject);
+                AC.GetExplosionAudio();
             }
         }
 

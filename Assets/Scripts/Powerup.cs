@@ -11,8 +11,11 @@ public class Powerup : MonoBehaviour
     [SerializeField] // 0 = Triple Shot, 1 = Speed Boost, 2 = Shields
     private int powerupID;
 
+    private AudioClips AC;
+
     void Start()
     {
+        AC = GameObject.Find("AudioManager").GetComponent<AudioClips>();
     }
 
     void Update()
@@ -41,6 +44,7 @@ public class Powerup : MonoBehaviour
         {
             if (player != null)
             {
+                AC.GetPowerUpAudio();
                 player.AddScore(15);
 
                 switch(powerupID)

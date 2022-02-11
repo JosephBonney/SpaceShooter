@@ -15,9 +15,13 @@ namespace SpaceShooter.Enemy
 
         private Collider2D col;
 
+        private AudioClips AC;
+
         void Start()
         {
             player = GameObject.Find("Player").GetComponent<Player.Player>();
+
+            AC = GameObject.Find("AudioManager").GetComponent<AudioClips>();
 
             if(player == null)
             {
@@ -29,6 +33,11 @@ namespace SpaceShooter.Enemy
             if(anim == null)
             {
                 Debug.LogError("Animator is NULL");
+            }
+
+            if(AC == null)
+            {
+                Debug.LogError("No Audio Source or clip");
             }
 
             col = gameObject.GetComponent<Collider2D>();
@@ -92,6 +101,7 @@ namespace SpaceShooter.Enemy
             anim.SetTrigger("OnEnemyDeath");
             col.enabled = false;
             speed = 0;
+            AC.GetExplosionAudio();
         }
     }
 }
