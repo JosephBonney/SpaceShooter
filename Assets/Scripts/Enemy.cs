@@ -11,9 +11,30 @@ namespace SpaceShooter.Enemy
 
         Player.Player player;
 
+        private Animator anim;
+
+        private Collider2D col;
+
         void Start()
         {
             player = GameObject.Find("Player").GetComponent<Player.Player>();
+
+            if(player == null)
+            {
+                Debug.LogError("Player is NULL");
+            }
+
+            anim = gameObject.GetComponent<Animator>();
+
+            if(anim == null)
+            {
+                Debug.LogError("Animator is NULL");
+            }
+
+            col = gameObject.GetComponent<Collider2D>();
+            col.enabled = true;
+
+
         }
 
         // Update is called once per frame
@@ -48,8 +69,9 @@ namespace SpaceShooter.Enemy
                 {
                     player.Damage();
                 }
+                EnemyExploder();
 
-                Destroy(this.gameObject);
+                Destroy(this.gameObject, 2.8f);
             }
 
             if (other.tag == "Laser")
@@ -59,8 +81,17 @@ namespace SpaceShooter.Enemy
                 {
                     player.AddScore(10);
                 }
-                Destroy(this.gameObject);
+                EnemyExploder();
+
+                Destroy(this.gameObject, 2.8f);
             }
+        }
+
+        void EnemyExploder()
+        {
+            anim.SetTrigger("OnEnemyDeath");
+            col.enabled = false;
+            speed = 0;
         }
     }
 }

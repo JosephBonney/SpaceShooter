@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6713475374552395291}
   - component: {fileID: 4486111990788172863}
   - component: {fileID: 8983311235697717167}
+  - component: {fileID: 2956540297595338731}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -147,3 +148,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.342987, y: 2.9741259}
   m_EdgeRadius: 0
+--- !u!95 &2956540297595338731
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3647508279712894867}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3f1384f62de112b40adf9587760e6c8b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

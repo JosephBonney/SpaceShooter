@@ -22,6 +22,11 @@ namespace SpaceShooter.Player
         [SerializeField]
         private GameObject ShieldsPrefab;
         [SerializeField]
+        private GameObject[] engines;
+
+        private EngineDamage engineDamage;
+
+        [SerializeField]
         private float _fireRate = 0.5f;
         [SerializeField]
         private float _canFire = -1;
@@ -37,6 +42,7 @@ namespace SpaceShooter.Player
         private SpawnManager spawner;
         private UIManager uiManager;
 
+        
         private bool isTripleShotActive = false;
         private bool isSpeedBoostActive = false;
         private bool isShieldActive = false;
@@ -231,7 +237,10 @@ namespace SpaceShooter.Player
 
         public void Damage()
         {
-            if(isShieldActive == true)
+            GameObject REngine = engines[0];
+            GameObject LEngine = engines[1];
+
+            if (isShieldActive == true)
             {
                 isShieldActive = false;
                 Destroy(newShield);
@@ -239,6 +248,47 @@ namespace SpaceShooter.Player
             }
 
             _lives -= 1;
+
+            if (_lives == 2)
+            {
+                
+                GameObject randomEngine = engines[Random.Range(0, engines.Length)];
+                engineDamage = randomEngine.GetComponent<EngineDamage>();
+                if (randomEngine.GetComponent<SpriteRenderer>() == null)
+                {
+                    Debug.LogError("Engine Damage Script is Null");
+                }
+                if (engineDamage.isEngineActive == true)
+                {
+                    randomEngine.GetComponent<SpriteRenderer>().enabled = true;
+                    engineDamage.EnableEngineDamage();
+                    Debug.Log(_lives);
+                }
+            }
+            if(_lives == 1)
+            {
+                SpriteRenderer RengineRenderer = engines[0].GetComponent<SpriteRenderer>();
+                SpriteRenderer LengineRenderer = engines[1].GetComponent<SpriteRenderer>();
+                Debug.Log(_lives);
+                GameObject randomEngine = engines[Random.Range(0, engines.Length)];
+                engineDamage = randomEngine.GetComponent<EngineDamage>();
+                if (randomEngine.GetComponent<EngineDamage>() == null)
+                {
+                    Debug.LogError("Engine Damage Script is Null");
+                }
+                if (RengineRenderer.enabled == false)
+                {
+                    RengineRenderer.enabled = true;
+                    engineDamage.EnableEngineDamage();
+                }
+
+                if (LengineRenderer.enabled == false)
+                {
+                    LengineRenderer.enabled = true;
+                    engineDamage.EnableEngineDamage();
+                }
+                
+            }
 
             uiManager.UpdateLives(_lives);
                 

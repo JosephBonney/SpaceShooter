@@ -27,8 +27,7 @@ public class SpawnManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(SpawnEnemyRoutine());
-        StartCoroutine(SpawnPowerupRoutine());
+        
     }
 
     #endregion
@@ -43,6 +42,7 @@ public class SpawnManager : MonoBehaviour
         posY = 7.5f;
         float randomX = Random.Range(-8f, 8f);
 
+        yield return new WaitForSeconds(3.0f);
         while(stopSpawing == false)
         {
             Vector3 SpawnPos = new Vector3(randomX, posY, 0);
@@ -61,6 +61,7 @@ public class SpawnManager : MonoBehaviour
         float powerupPosY = transform.position.y;
         powerupPosY = 7.5f;
 
+        yield return new WaitForSeconds(3.0f);
         while(stopSpawing == false)
         {
             Vector3 powerupSpawnPos = new Vector3(Random.Range(-8f, 8f), powerupPosY, 0);
@@ -78,6 +79,12 @@ public class SpawnManager : MonoBehaviour
     public void OnPlayerDeath()
     {
         stopSpawing = true;
+    }
+
+    public void StartSpawning()
+    {
+        StartCoroutine(SpawnEnemyRoutine());
+        StartCoroutine(SpawnPowerupRoutine());  
     }
 
     #endregion
