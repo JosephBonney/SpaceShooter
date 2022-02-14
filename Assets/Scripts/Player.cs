@@ -85,6 +85,7 @@ namespace SpaceShooter.Player
         {
             FireLaser();
             CalculateMovement();
+            ButtonBoost();
         }
         #endregion
 
@@ -325,6 +326,23 @@ namespace SpaceShooter.Player
         }
 
         #endregion
+
+        #region ButtonBoost
+
+
+        #endregion
+
+        void ButtonBoost()
+        {
+            if(Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                speed = speed * 2;
+            }
+            if(Input.GetKeyUp(KeyCode.LeftShift))
+            {
+                speed = originalSpeed;
+            }
+        }
 
         #endregion
     }

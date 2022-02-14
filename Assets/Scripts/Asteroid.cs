@@ -45,6 +45,7 @@ public class Asteroid : MonoBehaviour
         if(other.tag == "Laser")
         {
             Destroy(other.gameObject);
+            gameObject.GetComponent<Collider2D>().enabled = false;
             Explode();
         }
     }

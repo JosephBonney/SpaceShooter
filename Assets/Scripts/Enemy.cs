@@ -7,6 +7,8 @@ namespace SpaceShooter.Enemy
 {
     public class Enemy : MonoBehaviour
     {
+        #region Variables
+
         public float speed = -4f;
 
         Player.Player player;
@@ -16,6 +18,18 @@ namespace SpaceShooter.Enemy
         private Collider2D col;
 
         private AudioClips AC;
+
+        [SerializeField]
+        private GameObject laser;
+
+        [SerializeField]
+        private float FireRate = 3.0f;
+        private float canFire = -1.0f;
+        private bool isDead = false;
+
+        #endregion
+
+        #region BuiltIn Methods
 
         void Start()
         {
@@ -50,6 +64,20 @@ namespace SpaceShooter.Enemy
         void Update()
         {
             EnemyBehavior();
+
+            if(Time.time > canFire && isDead == false)
+            {
+                FireRate = Random.Range(2.0f, 5.0f);
+                canFire = Time.time + FireRate;
+                GameObject EnemyLaser = Instantiate(laser, transform.position, Quaternion.identity);
+                AC.GetLaserAudioClip();
+                Laser[] lasers = EnemyLaser.GetComponentsInChildren<Laser>();
+
+                for(int i = 0; i < lasers.Length; i++)
+                {
+                    lasers[i].EnemyLaser();
+                }
+            }
         }
 
         void EnemyBehavior()
@@ -67,6 +95,13 @@ namespace SpaceShooter.Enemy
             }
             
         }
+
+        #endregion
+
+
+        #region Custom Methods
+
+        #region Trigger
 
         void OnTriggerEnter2D(Collider2D other)
         {
@@ -96,12 +131,17 @@ namespace SpaceShooter.Enemy
             }
         }
 
+        #endregion
+
         void EnemyExploder()
         {
+            isDead = true;
             anim.SetTrigger("OnEnemyDeath");
             col.enabled = false;
             speed = 0;
             AC.GetExplosionAudio();
         }
+
+        #endregion
     }
 }
