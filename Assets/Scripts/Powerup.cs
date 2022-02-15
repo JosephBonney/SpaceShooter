@@ -8,14 +8,22 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     private float speed = 3f;
 
+    private Player player;
+
     [SerializeField] // 0 = Triple Shot, 1 = Speed Boost, 2 = Shields
     private int powerupID;
 
     private AudioClips AC;
 
+    private ShieldBehavior SB;
+
     void Start()
     {
         AC = GameObject.Find("AudioManager").GetComponent<AudioClips>();
+        if(AC == null)
+        {
+            Debug.LogError("No AC");
+        }
     }
 
     void Update()
@@ -39,9 +47,14 @@ public class Powerup : MonoBehaviour
         Debug.Log("Hit: " + other.transform.name);
 
         Player player = other.transform.GetComponent<Player>();
-
+      
         if (other.tag == "Player")
         {
+            if (player == null)
+            {
+                Debug.LogError("No player component");
+            }
+
             if (player != null)
             {
                 AC.GetPowerUpAudio();
@@ -62,6 +75,7 @@ public class Powerup : MonoBehaviour
                         player.ShieldsActive();
                         Destroy(this.gameObject);
                         break;
+                        
 
                     default:
                         Debug.Log("Default Value");
@@ -71,7 +85,7 @@ public class Powerup : MonoBehaviour
         }
     }
 
-    void DestroyPowerup()
+    public void DestroyPowerup()
     {
         float posY = transform.position.y;
         if (posY <= -5.6f)

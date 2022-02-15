@@ -13,6 +13,8 @@ public class Laser : MonoBehaviour
 
     private bool isEnemyLaser = false;
 
+    private ShieldBehavior SB;
+
     #endregion
 
     // Update is called once per frame

@@ -20,7 +20,7 @@ namespace SpaceShooter.Player
         [SerializeField]
         private GameObject _tripleShot;
         [SerializeField]
-        private GameObject ShieldsPrefab;
+        private GameObject Shields;
         [SerializeField]
         private GameObject[] engines;
 
@@ -45,12 +45,21 @@ namespace SpaceShooter.Player
         
         private bool isTripleShotActive = false;
         private bool isSpeedBoostActive = false;
-        private bool isShieldActive = false;
-        private GameObject newShield;
+        public bool IsShieldActive = false;
+
 
         public int score = 0;
 
         private AudioClips AC;
+
+        public int ShieldHits = 2;
+
+        private SpriteRenderer NewShieldColor;
+
+        [SerializeField]
+        Color[] ShieldColors;
+
+        public bool ShieldDestroyed = false;
 
         #endregion
 
@@ -58,14 +67,16 @@ namespace SpaceShooter.Player
         void Start()
         {
             originalSpeed = speed;
+            Shields.SetActive(false);
 
             transform.position = new Vector3 (0, 0, 0);
 
             spawner = GameObject.Find("SpawnManager"). GetComponent<SpawnManager>();
             uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
             AC = GameObject.Find("AudioManager").GetComponent<AudioClips>();
+            //NewShieldColor = GameObject.Find("Shields").GetComponent<SpriteRenderer>();
 
-            if(uiManager == null)
+            if (uiManager == null)
             {
                 Debug.Log("The UI Manager Is NULL");
             }
@@ -78,6 +89,11 @@ namespace SpaceShooter.Player
             if(AC == null)
             {
                 Debug.LogError("No Audio source or clip");
+            }
+
+            if(NewShieldColor == null)
+            {
+                Debug.Log("There are no shields on start");
             }
 
         }
@@ -138,6 +154,8 @@ namespace SpaceShooter.Player
             StartCoroutine(TripleShotPowerDownRoutine());
         }
 
+        #region Speed Boost
+
         public void SpeedBoostActive()
         {
             isSpeedBoostActive = true;
@@ -150,18 +168,22 @@ namespace SpaceShooter.Player
                 speed = originalSpeed;
         }
 
+        #endregion
+
+        #region Shields
+
         public void ShieldsActive()
         {
-            isShieldActive = true;
+            NewShieldColor = Shields.GetComponent<SpriteRenderer>();
+            IsShieldActive = true;
+            Shields.SetActive(true);
+            ShieldHits = 3;
+            NewShieldColor.color = ShieldColors[0];
+            
 
-            if (isShieldActive == true)
-            {
-                newShield = Instantiate(ShieldsPrefab, transform.position, Quaternion.identity);
-                newShield.transform.parent = this.transform;
-            }
-            else
-                Debug.Log("No Shields");
         }
+
+        #endregion
 
 
         #endregion
@@ -254,11 +276,40 @@ namespace SpaceShooter.Player
             GameObject REngine = engines[0];
             GameObject LEngine = engines[1];
 
-            if (isShieldActive == true)
+            if (IsShieldActive == true)
             {
-                isShieldActive = false;
-                Destroy(newShield);
-                return;
+                NewShieldColor = Shields.GetComponent<SpriteRenderer>();
+                if (AC == null)
+                {
+                    Debug.LogError("No Audio source or clip");
+                }
+                if(ShieldHits == 3)
+                {
+                    ShieldDamage();
+                    ShieldDestroyed = false;
+                    NewShieldColor.color = ShieldColors[0];
+                }
+                if (ShieldHits == 2)
+                {
+                    ShieldDamage();
+                    ShieldDestroyed = false;
+                    NewShieldColor.color = ShieldColors[1];
+                    return;
+                }
+                if(ShieldHits == 1)
+                {
+                    ShieldDamage();
+                    ShieldDestroyed = false;
+                    NewShieldColor.color = ShieldColors[2];
+                    return;
+                }
+                else
+                {
+                    IsShieldActive = false;
+                    Shields.SetActive(false);
+                    Debug.Log("ShieldDestroyed");
+                    return;
+                }
             }
 
             _lives -= 1;
@@ -329,21 +380,28 @@ namespace SpaceShooter.Player
 
         #region ButtonBoost
 
-
-        #endregion
-
         void ButtonBoost()
         {
-            if(Input.GetKeyDown(KeyCode.LeftShift))
+            if (Input.GetKeyDown(KeyCode.LeftShift))
             {
                 speed = speed * 2;
             }
-            if(Input.GetKeyUp(KeyCode.LeftShift))
+            if (Input.GetKeyUp(KeyCode.LeftShift))
             {
                 speed = originalSpeed;
             }
         }
 
+        #endregion
+
+
+        #region Shield Behavior
+        public void ShieldDamage()
+        {
+            ShieldHits -= 1;
+        }
+
+        #endregion
         #endregion
     }
 }
