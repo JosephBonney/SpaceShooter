@@ -1245,7 +1245,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1583709149}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -1458,6 +1458,82 @@ RectTransform:
   m_AnchoredPosition: {x: -100, y: -50}
   m_SizeDelta: {x: 86.2, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1489360046
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1489360049}
+  - component: {fileID: 1489360048}
+  - component: {fileID: 1489360047}
+  m_Layer: 5
+  m_Name: ShieldLivesImg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1489360047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489360046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 69f493b9690910e4fbe83b6703d82e53, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 1
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1489360048
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489360046}
+  m_CullTransparentMesh: 1
+--- !u!224 &1489360049
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1489360046}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1583709149}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 115.000015, y: -184.99994}
+  m_SizeDelta: {x: 300.94, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1583709144
 GameObject:
   m_ObjectHideFlags: 0
@@ -1492,15 +1568,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scoreText: {fileID: 1359456500}
   LivesImg: {fileID: 1994519791}
+  ShieldLivesImg: {fileID: 1489360047}
   liveSprites:
   - {fileID: 21300000, guid: ba53e111f0125654cabfd4eefaf3a657, type: 3}
   - {fileID: 21300000, guid: 80fba5ece7697c44eacc036539c1b552, type: 3}
   - {fileID: 21300000, guid: 482c8e4c0346b704aa5f1760c3c989d5, type: 3}
   - {fileID: 21300000, guid: 9fe6f40efddf0b64fb68a3382b14a4db, type: 3}
+  ShieldLivesSprites:
+  - {fileID: 21300000, guid: 69f493b9690910e4fbe83b6703d82e53, type: 3}
+  - {fileID: 21300000, guid: 826376b8efe4668459d200149074123a, type: 3}
+  - {fileID: 21300000, guid: f49f712509683c04b8eb0f6f1ae9d677, type: 3}
+  - {fileID: 21300000, guid: 380288412c50c4d46a36fa863fe36e84, type: 3}
   GameOverText: {fileID: 1947805073}
   RestartText: {fileID: 991005400}
   flickerTime: 0.5
-  gm: {fileID: 0}
+  gm: {fileID: 1728865280}
 --- !u!114 &1583709146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1575,9 +1657,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1359456502}
-  - {fileID: 1994519793}
   - {fileID: 1947805072}
   - {fileID: 991005399}
+  - {fileID: 1489360049}
+  - {fileID: 1994519793}
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1688,6 +1771,14 @@ PrefabInstance:
     - target: {fileID: 3594971322770665650, guid: 2bae7bd8c94a0234a93949f916cb89fd, type: 3}
       propertyPath: m_TagString
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4330547011014391070, guid: 2bae7bd8c94a0234a93949f916cb89fd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6388521538216241734, guid: 2bae7bd8c94a0234a93949f916cb89fd, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7492226077703470475, guid: 2bae7bd8c94a0234a93949f916cb89fd, type: 3}
       propertyPath: m_RootOrder
@@ -1942,7 +2033,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1583709149}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2003,7 +2094,7 @@ GameObject:
   - component: {fileID: 1994519792}
   - component: {fileID: 1994519791}
   m_Layer: 5
-  m_Name: Image
+  m_Name: LivesImg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2054,17 +2145,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1994519790}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1583709149}
-  m_RootOrder: 1
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 90, y: -60}
+  m_AnchoredPosition: {x: 90, y: -59.99994}
   m_SizeDelta: {x: 150, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2009707583
@@ -2109,14 +2200,14 @@ MonoBehaviour:
   engines:
   - {fileID: 1785589388}
   - {fileID: 896022779}
-  _fireRate: 0.15
+  _fireRate: 0.2
   _canFire: -1
   TripleShotCoolDownRate: 5
   SpeedBoostCoolDownRate: 5
   _lives: 3
   IsShieldActive: 0
   score: 0
-  ShieldHits: 3
+  ShieldHits: 0
   ShieldColors:
   - {r: 0.6862745, g: 0.8039216, b: 0.84313726, a: 1}
   - {r: 1, g: 0.19607843, b: 0.05882353, a: 1}

@@ -42,7 +42,7 @@ namespace SpaceShooter.Player
         private SpawnManager spawner;
         private UIManager uiManager;
 
-        
+
         private bool isTripleShotActive = false;
         private bool isSpeedBoostActive = false;
         public bool IsShieldActive = false;
@@ -67,11 +67,13 @@ namespace SpaceShooter.Player
         void Start()
         {
             originalSpeed = speed;
-            Shields.SetActive(false);
+            Shields.GetComponent<SpriteRenderer>().enabled = false;
+            Shields.GetComponent<Collider2D>().enabled = false;
+            ShieldHits = 0;
 
-            transform.position = new Vector3 (0, 0, 0);
+            transform.position = new Vector3(0, 0, 0);
 
-            spawner = GameObject.Find("SpawnManager"). GetComponent<SpawnManager>();
+            spawner = GameObject.Find("SpawnManager").GetComponent<SpawnManager>();
             uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
             AC = GameObject.Find("AudioManager").GetComponent<AudioClips>();
             //NewShieldColor = GameObject.Find("Shields").GetComponent<SpriteRenderer>();
@@ -81,17 +83,17 @@ namespace SpaceShooter.Player
                 Debug.Log("The UI Manager Is NULL");
             }
 
-            if(spawner == null)
+            if (spawner == null)
             {
                 Debug.LogError("The Spawn Manager Is NULL");
             }
 
-            if(AC == null)
+            if (AC == null)
             {
                 Debug.LogError("No Audio source or clip");
             }
 
-            if(NewShieldColor == null)
+            if (NewShieldColor == null)
             {
                 Debug.Log("There are no shields on start");
             }
@@ -112,7 +114,7 @@ namespace SpaceShooter.Player
         {
             Vector3 offset = new Vector3(0f, 1.0f, 0f);
 
-            if(isTripleShotActive == true)
+            if (isTripleShotActive == true)
             {
                 if (Input.GetButtonDown("Fire1") && Time.time > _canFire)
                 {
@@ -135,7 +137,7 @@ namespace SpaceShooter.Player
                     Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
                     AC.GetLaserAudioClip();
                 }
-                
+
                 if (Input.GetButtonDown("Jump") && Time.time > _canFire)
                 {
                     _canFire = Time.time + _fireRate;
@@ -143,7 +145,7 @@ namespace SpaceShooter.Player
                     AC.GetLaserAudioClip();
                 }
             }
-            
+
         }
 
         #region TripleShot
@@ -174,13 +176,12 @@ namespace SpaceShooter.Player
 
         public void ShieldsActive()
         {
+            TurnShieldComponentsOn();
             NewShieldColor = Shields.GetComponent<SpriteRenderer>();
             IsShieldActive = true;
-            Shields.SetActive(true);
             ShieldHits = 3;
             NewShieldColor.color = ShieldColors[0];
-            
-
+            uiManager.UpdateShieldLives(3);
         }
 
         #endregion
@@ -278,36 +279,41 @@ namespace SpaceShooter.Player
 
             if (IsShieldActive == true)
             {
+                TurnShieldComponentsOn();
                 NewShieldColor = Shields.GetComponent<SpriteRenderer>();
                 if (AC == null)
                 {
                     Debug.LogError("No Audio source or clip");
                 }
-                if(ShieldHits == 3)
+                if (ShieldHits == 3)
                 {
                     ShieldDamage();
                     ShieldDestroyed = false;
                     NewShieldColor.color = ShieldColors[0];
+                    uiManager.UpdateShieldLives(3);
                 }
                 if (ShieldHits == 2)
                 {
                     ShieldDamage();
                     ShieldDestroyed = false;
                     NewShieldColor.color = ShieldColors[1];
+                    uiManager.UpdateShieldLives(2);
                     return;
                 }
-                if(ShieldHits == 1)
+                if (ShieldHits == 1)
                 {
                     ShieldDamage();
                     ShieldDestroyed = false;
                     NewShieldColor.color = ShieldColors[2];
+                    uiManager.UpdateShieldLives(1);
                     return;
                 }
                 else
                 {
                     IsShieldActive = false;
-                    Shields.SetActive(false);
+                    TurnShieldComponentsOff();
                     Debug.Log("ShieldDestroyed");
+                    uiManager.UpdateShieldLives(0);
                     return;
                 }
             }
@@ -316,7 +322,7 @@ namespace SpaceShooter.Player
 
             if (_lives == 2)
             {
-                
+
                 GameObject randomEngine = engines[Random.Range(0, engines.Length)];
                 engineDamage = randomEngine.GetComponent<EngineDamage>();
                 if (randomEngine.GetComponent<SpriteRenderer>() == null)
@@ -330,7 +336,7 @@ namespace SpaceShooter.Player
                     Debug.Log(_lives);
                 }
             }
-            if(_lives == 1)
+            if (_lives == 1)
             {
                 SpriteRenderer RengineRenderer = engines[0].GetComponent<SpriteRenderer>();
                 SpriteRenderer LengineRenderer = engines[1].GetComponent<SpriteRenderer>();
@@ -352,13 +358,13 @@ namespace SpaceShooter.Player
                     LengineRenderer.enabled = true;
                     engineDamage.EnableEngineDamage();
                 }
-                
+
             }
 
             uiManager.UpdateLives(_lives);
-                
 
-            if(_lives <= 0)
+
+            if (_lives <= 0)
             {
                 spawner.OnPlayerDeath();
                 Destroy(this.gameObject);
@@ -399,6 +405,18 @@ namespace SpaceShooter.Player
         public void ShieldDamage()
         {
             ShieldHits -= 1;
+        }
+
+        void TurnShieldComponentsOn()
+        {
+            Shields.GetComponent<Collider2D>().enabled = true;
+            Shields.GetComponent<SpriteRenderer>().enabled = true;
+        }
+
+        void TurnShieldComponentsOff()
+        {
+            Shields.GetComponent<Collider2D>().enabled = false;
+            Shields.GetComponent<SpriteRenderer>().enabled = false;
         }
 
         #endregion
