@@ -45,6 +45,7 @@ namespace SpaceShooter.Player
 
         private bool isTripleShotActive = false;
         private bool isSpeedBoostActive = false;
+        [HideInInspector]
         public bool IsShieldActive = false;
 
 
@@ -58,8 +59,15 @@ namespace SpaceShooter.Player
 
         [SerializeField]
         Color[] ShieldColors;
-
+        [HideInInspector]
         public bool ShieldDestroyed = false;
+
+        [SerializeField]
+        public int maxAmmo = 15;
+
+        public int currentAmmo;
+        [HideInInspector]
+        public bool hasAmmo = true;
 
         #endregion
 
@@ -70,6 +78,7 @@ namespace SpaceShooter.Player
             Shields.GetComponent<SpriteRenderer>().enabled = false;
             Shields.GetComponent<Collider2D>().enabled = false;
             ShieldHits = 0;
+            currentAmmo = maxAmmo;
 
             transform.position = new Vector3(0, 0, 0);
 
@@ -113,17 +122,27 @@ namespace SpaceShooter.Player
         void FireLaser()
         {
             Vector3 offset = new Vector3(0f, 1.0f, 0f);
-
+            AmmoCount();
+            if (Input.GetButtonDown("Fire1") && hasAmmo == false)
+            {
+                AC.GetNoAmmoAudio();
+            }
+            if (Input.GetButtonDown("Jump") && hasAmmo == false)
+            {
+                AC.GetNoAmmoAudio();
+            }
             if (isTripleShotActive == true)
             {
-                if (Input.GetButtonDown("Fire1") && Time.time > _canFire)
+                if (Input.GetButtonDown("Fire1") && Time.time > _canFire && hasAmmo == true)
                 {
+                    currentAmmo -= 1;
                     _canFire = Time.time + _fireRate;
                     Instantiate(_tripleShot, transform.position, Quaternion.identity);
                     AC.GetLaserAudioClip();
                 }
-                if (Input.GetButtonDown("Jump") && Time.time > _canFire)
+                if (Input.GetButtonDown("Jump") && Time.time > _canFire && hasAmmo == true)
                 {
+                    currentAmmo -= 1;
                     _canFire = Time.time + _fireRate;
                     Instantiate(_tripleShot, transform.position, Quaternion.identity);
                     AC.GetLaserAudioClip();
@@ -131,20 +150,23 @@ namespace SpaceShooter.Player
             }
             else
             {
-                if (Input.GetButtonDown("Fire1") && Time.time > _canFire)
+                if (Input.GetButtonDown("Fire1") && Time.time > _canFire && hasAmmo == true)
                 {
+                    currentAmmo -= 1;
                     _canFire = Time.time + _fireRate;
                     Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
                     AC.GetLaserAudioClip();
                 }
 
-                if (Input.GetButtonDown("Jump") && Time.time > _canFire)
+                if (Input.GetButtonDown("Jump") && Time.time > _canFire && hasAmmo == true)
                 {
+                    currentAmmo -= 1;
                     _canFire = Time.time + _fireRate;
                     Instantiate(_laserPrefab, transform.position + offset, Quaternion.identity);
                     AC.GetLaserAudioClip();
                 }
             }
+            uiManager.UpdateAmmo(currentAmmo);
 
         }
 
@@ -279,6 +301,7 @@ namespace SpaceShooter.Player
 
             if (IsShieldActive == true)
             {
+                
                 TurnShieldComponentsOn();
                 NewShieldColor = Shields.GetComponent<SpriteRenderer>();
                 if (AC == null)
@@ -363,7 +386,6 @@ namespace SpaceShooter.Player
 
             uiManager.UpdateLives(_lives);
 
-
             if (_lives <= 0)
             {
                 spawner.OnPlayerDeath();
@@ -417,6 +439,24 @@ namespace SpaceShooter.Player
         {
             Shields.GetComponent<Collider2D>().enabled = false;
             Shields.GetComponent<SpriteRenderer>().enabled = false;
+        }
+
+        #endregion
+
+        #region AmmoBehavior
+
+        public void AmmoCount()
+        {
+            if (currentAmmo <= 0)
+            {
+                currentAmmo = 0;
+                hasAmmo = false;
+                Debug.Log("No Ammo");
+            }
+            else
+            {
+                hasAmmo = true;
+            }
         }
 
         #endregion

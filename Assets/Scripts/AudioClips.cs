@@ -34,4 +34,9 @@ public class AudioClips : MonoBehaviour
     {
         Audio[2].Play();
     }
+
+    public void GetNoAmmoAudio()
+    {
+        Audio[3].Play();
+    }
 }
