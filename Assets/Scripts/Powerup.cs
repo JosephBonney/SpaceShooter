@@ -75,7 +75,10 @@ public class Powerup : MonoBehaviour
                         player.ShieldsActive();
                         Destroy(this.gameObject);
                         break;
-                        
+                    case 3:
+                        player.AmmoReload();
+                        Destroy(this.gameObject);
+                        break;
 
                     default:
                         Debug.Log("Default Value");

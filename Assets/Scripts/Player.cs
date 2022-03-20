@@ -445,6 +445,12 @@ namespace SpaceShooter.Player
 
         #region AmmoBehavior
 
+        public void AmmoReload()
+        {
+            currentAmmo = maxAmmo;
+            uiManager.UpdateAmmo(currentAmmo);
+            hasAmmo = true;
+        }
         public void AmmoCount()
         {
             if (currentAmmo <= 0)
@@ -460,6 +466,7 @@ namespace SpaceShooter.Player
         }
 
         #endregion
+
         #endregion
     }
 }
